@@ -1,0 +1,14 @@
+{
+    "name": "custom-sysctl-profile",
+    "description": "Allows certain users to set certain sysctls on pods",
+    "experimental_customizations": [
+      {
+        "component": "kubelet",
+        "arguments": {
+            "allowed-unsafe-sysctls": "'net.core.somaxconn,net.ipv4.tcp_retries2'"
+        },
+        "file-arguments": {
+        }
+      }
+    ]
+  }

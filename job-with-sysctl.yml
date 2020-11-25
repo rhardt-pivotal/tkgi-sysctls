@@ -1,0 +1,38 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: echo-sysctl
+spec:
+  template:
+    spec:
+      securityContext:
+        sysctls:
+        - name: net.core.somaxconn
+          value: "64000"
+        - name: net.ipv4.tcp_retries2
+          value: "13"
+      containers:
+      - name: echo-sysctl
+        image: alpine:latest
+        resources:
+          limits:
+            cpu: "10m"
+            memory: "8Mi"
+          requests:
+            cpu: "10m"
+            memory: "8Mi"
+        command:
+        - "/bin/sh"
+        - "-c"
+        - | 
+          echo -n 'net.core.somaxconn: '
+          cat /proc/sys/net/core/somaxconn 
+          echo -n 'vm.max_map_count: '
+          cat /proc/sys/vm/max_map_count 
+          echo -n 'net.ipv4.tcp_retries2: '
+          cat  /proc/sys/net/ipv4/tcp_retries2
+      restartPolicy: Never  
+
+
+
+        

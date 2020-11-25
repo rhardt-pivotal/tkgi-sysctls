@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: custom-sysctl-cm
+  namespace: default
+data:
+  custom-sysctl-tunings: |
+    net.core.somaxconn=65000
+    vm.max_map_count=262000
+    net.ipv4.tcp_retries2=10

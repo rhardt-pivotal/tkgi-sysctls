@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: custom-sysctl-ds
+  namespace: default
+  labels:
+    app: custom-sysctl-ds
+spec:
+  selector:
+    matchLabels:
+      name: custom-sysctl-ds
+  template:
+    metadata:
+      labels:
+        name: custom-sysctl-ds
+    spec:
+      hostNetwork: true
+      containers:
+      - name: "custom-sysctl-runner"
+        image: "alpine:latest"
+        resources:
+          limits:
+            cpu: "10m"
+            memory: "8Mi"
+          requests:
+            cpu: "10m"
+            memory: "8Mi"
+        securityContext:
+          privileged: true
+        command:
+        - "/bin/sh"
+        - "-c"
+        - |
+          set -o errexit
+          set -o xtrace
+          while true; do
+            sysctl -wp /app/custom-sysctl-tunings.conf
+            sleep 15s
+          done
+        volumeMounts:
+              - name: custom-sysctl-cm
+                mountPath: /app
+      volumes:
+        - name: custom-sysctl-cm
+          configMap:
+            name: custom-sysctl-cm
+            items:
+              - key: custom-sysctl-tunings
+                path: custom-sysctl-tunings.conf
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 50%
+    type: RollingUpdate
+           

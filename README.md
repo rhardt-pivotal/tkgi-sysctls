@@ -79,12 +79,13 @@ Notice the warning.  If there's evidence that this approach adds value for enter
 ```bash
 pks update-cluster bruce1 --kubernetes-profile custom-sysctl-profile
 ```
-PKS will zero-downtime update your cluster with the new settings.
+TKGI will zero-downtime update your cluster with the new settings.
 
 3.  Once again if you have Bosh access you can ssh into a worker node and verify the flags passed to `kubelet`.
 
 
 **Deploy the RBAC assets to allow certain pods to set certain sysctls**
+
 Look at these files to see how sysctl permissions are propagated to the `default` serviceaccount in the `default` namespace
 ```bash
 kubectl apply -f ./custom-sysctl-psp.yml
